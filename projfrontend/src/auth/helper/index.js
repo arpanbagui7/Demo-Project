@@ -45,12 +45,14 @@ export const isAuthenticated = () => {
 }
 
 export const signout = (next) => {
-    const userId = isAuthenticated()?.user.id
+    debugger
+    const userId = isAuthenticated() && isAuthenticated().user.id
     if(typeof window != undefined){
         localStorage.removeItem('jwt')
         clearCart(() => {})
-        return fetch(`${API}logout/${userId}`, {'method' : 'GET'})
+        return fetch(`${API}user/logout/${userId}`, {'method' : 'GET'})
         .then(response => {
+            console.log(response)
              console.log('Logout Successfully')
              next()
         })

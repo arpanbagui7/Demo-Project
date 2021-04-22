@@ -5,8 +5,8 @@ import {signin, isAuthenticated, authenticate} from '../auth/helper/index'
 
 const Signin = () => {
     const [values, setValues] = useState({
-        'email' : 'one@gmail.com',
-        'password' : '12345',
+        'email' : '',
+        'password' : '',
         'error' : '',
         'success' : false,
         'loading' : false,
@@ -25,9 +25,8 @@ const Signin = () => {
         .then(data => {
             console.log(data)
             if(data.token){
-                let sessionToken = data.token
-                authenticate(sessionToken, () => {
-                    setValues({...values, 'didRedirect' : true})
+                authenticate(data, () => {
+                    setValues({...values, 'didRedirect' : true, 'sessionExist' : false})
                     console.log('Token Added Successfully')
                 })
             }

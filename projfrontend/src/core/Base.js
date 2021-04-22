@@ -1,10 +1,11 @@
 import React from 'react'
+import Menu from './Menu'
 
 const Base = ({title = 'Title', description = 'Description', className = 'bg-dark text-white', children}) => {
-    console.log('Children=== ',children)
     return (
         <div>
             <div className="container-fluid">
+                <Menu />
                 <div className="bg-dark text-white text-center jumbotron">
                     <div className="display-4">{title}</div>
                     <p className="lead">{description}</p>
