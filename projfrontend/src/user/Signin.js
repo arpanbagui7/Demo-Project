@@ -8,12 +8,10 @@ const Signin = () => {
         'email' : '',
         'password' : '',
         'error' : '',
-        'success' : false,
         'loading' : false,
         'sessionExist' : false,
-        'didRedirect' : false
     })
-    const {email, password, error, success, loading, didRedirect, sessionExist} = values
+    const {email, password, error, loading, sessionExist} = values
 
     const handleChange = name => event => {
         setValues({...values, error : false, [name] : event.target.value})
@@ -26,7 +24,7 @@ const Signin = () => {
             console.log(data)
             if(data.token){
                 authenticate(data, () => {
-                    setValues({...values, 'didRedirect' : true, 'sessionExist' : false})
+                    setValues({...values, 'sessionExist' : false})
                     console.log('Token Added Successfully')
                 })
             }
