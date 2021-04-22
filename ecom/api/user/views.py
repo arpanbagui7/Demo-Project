@@ -29,7 +29,7 @@ def signin(request):
             if user.session_token != '0' :
                 user.session_token = '0'
                 user.save()
-                return JsonResponse({'Previous Session Exist'})
+                return JsonResponse({'message' : 'Previous Session Exist'})
             token = session_generate_token(10)
             user.session_token = token
             user.save()

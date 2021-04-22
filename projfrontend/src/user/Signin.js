@@ -10,9 +10,10 @@ const Signin = () => {
         'error' : '',
         'success' : false,
         'loading' : false,
+        'sessionExist' : false,
         'didRedirect' : false
     })
-    const {email, password, error, success, loading, didRedirect} = values
+    const {email, password, error, success, loading, didRedirect, sessionExist} = values
 
     const handleChange = name => event => {
         setValues({...values, error : false, [name] : event.target.value})
@@ -22,12 +23,19 @@ const Signin = () => {
         event.preventDefault()
         signin({email, password})
         .then(data => {
+            console.log(data)
             if(data.token){
                 let sessionToken = data.token
                 authenticate(sessionToken, () => {
-                    setValues({...values, didRedirect : true})
+                    setValues({...values, 'didRedirect' : true})
                     console.log('Token Added Successfully')
                 })
+            }
+            else if(data.message){
+                setValues({...values, 'sessionExist' : true})
+            }
+            else{
+                setValues({...values, 'error' : true})
             }
         })
         .catch(error => console.log(error))
@@ -39,14 +47,6 @@ const Signin = () => {
                 <Redirect to = '/' />
             )
         }
-    }
-
-    const loadingMessage = () => {
-        return loadingMessage && (
-            <div className="alert alert-info">
-                <h2>Loading ...</h2>
-            </div>
-        )
     }
 
     const signinForm = () => {
@@ -67,15 +67,27 @@ const Signin = () => {
         ) 
     }
 
-    const successMessage = () => {
-        return (
+    const loadingMessage = () => {
+        return loading && (
             <div className="row">
                 <div className="col-md-6 offset-sm-3 text-left">
-                    <div className="alert alert-success">
-
-                    </div>
+                    <div className="alert alert-info">
+                        Loading...
+                     </div>
                 </div>
             </div>
+        )
+    }
+
+    const sessionExistanceMsg = () => {
+        return sessionExist && (
+            <div className="row">
+                <div className="col-md-6 offset-sm-3 text-left">
+                    <div className="alert alert-warning">
+                        Previous Session Exist! Please Try Again.
+                    </div>
+                </div>
+            </div> 
         )
     }
 
@@ -94,10 +106,11 @@ const Signin = () => {
     return ( 
         <Base title = "Sign In" description = 'Welcome to Sign In Page'>
             {loadingMessage()}
+            {sessionExistanceMsg()}
             {errorMessage()}
             {signinForm()}
-            {performRedirect()}
             <p className = 'text-light text-center'>{JSON.stringify(values)}</p>
+            {performRedirect()}
         </Base>
      );
 }
