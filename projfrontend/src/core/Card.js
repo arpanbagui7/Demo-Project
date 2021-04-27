@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ImageHelper from './helper/imageHelper'
 import {addItemToCart, removeItemFromCart} from './helper/cartHelper'
+import { isAuthenticated } from '../auth/helper';
+import {Redirect} from 'react-router-dom'
 
-const Card = ({product, addToCart = true, deleteFromCart = true}) => {
-    const isAuthenticated = true
+const Card = ({product, addToCart = true, deleteFromCart = false, reload = undefined, setReload = f => f}) => {
     const productName = product?.name ?? 'Default Product'
     const productDesc = product?.description ?? 'Default Description'
     const productAmount = product?.price ?? '0'
 
+    const [isRedirect, setIsRedirect] = useState(false)
+
     const onClickAddToCart = () => {
-        isAuthenticated ? addItemToCart(product, () => {}) : console.log('Please Login First!')
+        isAuthenticated() ? addItemToCart(product, () => {setIsRedirect(true)}) : console.log('Please Login First!')
        
     }
 
     const onClickDeleteFromCart = () => {
-        isAuthenticated ? removeItemFromCart(product.id) : console.log('Please Login First')
+        isAuthenticated() ? removeItemFromCart(product.id) : console.log('Please Login First')
+        {setReload(!reload)}
+    }
+
+    const handleRedirect = () => {
+        if(isRedirect){
+            return <Redirect to = "/cart"/>
+        }
     }
 
     const showAddToCart = (addToCart) => {
@@ -59,6 +69,7 @@ const Card = ({product, addToCart = true, deleteFromCart = true}) => {
                     {showDeleteFromCart(deleteFromCart)}
                 </div>
             </div>
+            {handleRedirect()}
         </div>
      );
 }

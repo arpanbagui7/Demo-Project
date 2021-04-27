@@ -6,6 +6,4 @@ class SimpleTests(SimpleTestCase):
         response = self.client.get('/api/')
         self.assertEqual(response.status_code, 200)
     
-    '''def urlTestForProduct(self):
-        response = self.client.get('/product/')
-        print(response)'''
+    
